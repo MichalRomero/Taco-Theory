@@ -7,5 +7,5 @@ views = Blueprint('views', __name__)
 #cannot acces home page until logged in
 @login_required
 def home():
-    return render_template("home.html")
+    return render_template("home.html", user=current_user)
 
