@@ -9,26 +9,18 @@ views = Blueprint('views', __name__)
 # Main Homepage (Public homepage for non-logged-in users, Redirect for logged-in users)
 @views.route('/', methods=['GET', 'POST'])
 def home():
-    if current_user.is_authenticated:  # If the user is logged in
-        if request.method == 'POST':  # Handle note submission
-            note = request.form.get('note')
+    if current_user.is_authenticated and request.method == 'POST':  # If logged in and submitted a note
+        note = request.form.get('note')
 
-            if len(note) < 1:
-                flash('Note is too short!', category='error')
-            else:
-                new_note = Note(data=note, user_id=current_user.id)
-                db.session.add(new_note)
-                db.session.commit()
-                flash('Note added!', category='success')
-
-        # Redirect logged-in users to their role-based homepage
-        if current_user.role == "staff":
-            return render_template("staff_home.html", user=current_user)  # Staff homepage
+        if len(note) < 1:
+            flash('Note is too short!', category='error')
         else:
-            return render_template("customer_home.html", user=current_user)  # Customer homepage
+            new_note = Note(data=note, user_id=current_user.id)
+            db.session.add(new_note)
+            db.session.commit()
+            flash('Note added!', category='success')
 
-    # If the user is not logged in, show the public homepage
-    return render_template("public_home.html", user=None)  # Public homepage for non-logged-in users
+    return render_template("home.html", user=current_user)  # Single homepage
 
 @views.route('/delete-note', methods=['POST'])
 @login_required  # Ensure the user is logged in before deleting a note

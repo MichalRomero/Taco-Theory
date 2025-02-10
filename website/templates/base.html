@@ -37,6 +37,14 @@
                     <a class="nav-item nav-link" id="login" href="/login">Login</a>
                     <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>                    
                     {% endif %}
+
+                    {% if current_user.role == "staff" %}
+                    <a class="nav-item nav-link" id="test1" href="/logout">Logout</a>
+                    {% endif %}
+
+                    {% if current_user.role == "customer" %}
+                    <a class="nav-item nav-link" id="test2" href="/logout">Logout</a>
+                    {% endif %}
                 </div>
             </div>
 
