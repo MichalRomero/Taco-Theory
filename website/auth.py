@@ -68,3 +68,15 @@ def sign_up():
             return redirect(url_for('views.home'))
 
     return render_template("sign_up.html", user=current_user)
+
+@auth.route('/menu', methods=['GET', 'POST'])
+def menu():
+    return render_template("menu.html", user=current_user)
+
+@auth.route('/order', methods=['GET', 'POST'])
+def order():
+    return render_template("order.html", user=current_user)
+
+@auth.route('/staff', methods=['GET', 'POST'])
+def staff():
+    return render_template("staff.html", user=current_user)

@@ -6,7 +6,7 @@ import json
 
 views = Blueprint('views', __name__)
 
-# Main Homepage (Public homepage for non-logged-in users, Redirect for logged-in users)
+# Main Homepage 
 @views.route('/', methods=['GET', 'POST'])
 def home():
     if current_user.is_authenticated and request.method == 'POST':  # If logged in and submitted a note

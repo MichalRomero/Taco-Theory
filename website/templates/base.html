@@ -31,6 +31,7 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" id="home" href="/">Home</a>
+                    <a class="nav-item nav-link" id="menu" href="/menu">Menu</a>
                     {% if user.is_authenticated %}
                     <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
                     {% else %}
@@ -39,11 +40,11 @@
                     {% endif %}
 
                     {% if current_user.role == "staff" %}
-                    <a class="nav-item nav-link" id="test1" href="/logout">Logout</a>
+                    <a class="nav-item nav-link" id="staff" href="/staff">staff</a>
                     {% endif %}
 
                     {% if current_user.role == "customer" %}
-                    <a class="nav-item nav-link" id="test2" href="/logout">Logout</a>
+                    <a class="nav-item nav-link" id="order" href="/order">order</a>
                     {% endif %}
                 </div>
             </div>
