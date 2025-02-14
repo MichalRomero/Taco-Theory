@@ -4,6 +4,23 @@
 
 {% block content %}
 
-<h1>Test</h1>
+<h1>Menu</h1>
+
+<div class="container">
+  <div class="row">
+      {% for food in foods %}
+      <div class="col-md-4 mb-4">  <!-- 3 cards per row -->
+          <div class="card" style="width: 100%;">
+              <div class="card-body">
+                  <h5 class="card-title">{{ food.name }}</h5>
+                  <p class="card-text">{{ food.description }}</p>
+                  <p class="card-text"><strong>Price:</strong> ${{ food.price }}</p>
+                  <a href="#" class="btn btn-primary">Order Now</a>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
 
 {% endblock %}

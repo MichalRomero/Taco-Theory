@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
+from .models import User, Food
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -71,7 +71,8 @@ def sign_up():
 
 @auth.route('/menu', methods=['GET', 'POST'])
 def menu():
-    return render_template("menu.html", user=current_user)
+    foods = Food.query.all()
+    return render_template("menu.html", user=current_user, foods=foods)
 
 @auth.route('/order', methods=['GET', 'POST'])
 def order():

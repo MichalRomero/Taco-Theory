@@ -15,3 +15,10 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(150))
     role = db.Column(db.String(50), default="customer")
     notes = db.relationship('Note')
+
+class Food(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.String(1000))
+    price = db.Column(db.Float, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
