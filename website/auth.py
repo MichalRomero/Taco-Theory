@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from .models import User, Food
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
@@ -75,8 +75,85 @@ def menu():
     return render_template("menu.html", user=current_user, foods=foods)
 
 @auth.route('/order', methods=['GET', 'POST'])
+@login_required
 def order():
-    return render_template("order.html", user=current_user)
+    foods = Food.query.all()
+
+    if 'basket' not in session:
+        session['basket'] = {}  # Initialize basket in session if not present
+
+    if request.method == 'POST':
+        food_id = request.form.get('food_id')
+        quantity = int(request.form.get('quantity', 1))  # Default to 1
+
+        if not food_id:
+            flash("Invalid food item.", category="error")
+            return redirect(url_for('auth.order'))
+
+        food = Food.query.get(food_id)
+        if not food:
+            flash("Food item not found.", category="error")
+            return redirect(url_for('auth.order'))
+
+        basket = session['basket']
+
+        # Add item to basket or update quantity
+        if food_id in basket:
+            basket[food_id] += quantity
+        else:
+            basket[food_id] = quantity
+
+        session['basket'] = basket  # Save basket in session
+        flash(f"{food.name} added to basket!", category="success")
+
+    return render_template("order.html", user=current_user, foods=foods)
+
+@auth.route('/basket')
+@login_required
+def view_basket():
+    if 'basket' not in session or not session['basket']:
+        flash("Your basket is empty.", category="info")
+        return render_template("basket.html", user=current_user, basket_items=[], total_price=0)
+
+    basket = session['basket']
+    food_items = []
+    total_price = 0
+
+    for food_id, quantity in basket.items():
+        food = Food.query.get(food_id)
+        if food:
+            food_items.append({'food': food, 'quantity': quantity})
+            total_price += food.price * quantity
+
+    return render_template("basket.html", user=current_user, basket_items=food_items, total_price=total_price)
+
+@auth.route('/checkout', methods=['GET'])
+@login_required
+def checkout():
+    if 'basket' not in session or not session['basket']:
+        flash("Your basket is empty. Add items before checking out.", category="info")
+        return redirect(url_for('auth.order'))
+
+    basket = session['basket']
+    food_items = []
+    total_price = 0
+
+    for food_id, quantity in basket.items():
+        food = Food.query.get(food_id)
+        if food:
+            food_items.append({'food': food, 'quantity': quantity})
+            total_price += food.price * quantity
+
+    return render_template("checkout.html", user=current_user, basket_items=food_items, total_price=total_price)
+
+@auth.route('/confirm-checkout', methods=['POST'])
+@login_required
+def confirm_checkout():
+    session.pop('basket', None)  # Clear basket from session after checkout
+    flash("Thank you! Your order has been placed successfully.", category="success")
+    return redirect(url_for('auth.order'))  # Redirect back to menu
+
+
 
 @auth.route('/staff', methods=['GET', 'POST'])
 def staff():

@@ -5,6 +5,7 @@
 {% block content %}
 
 <h1>Menu</h1>
+<h2>Want to order? Please Login!</h2>
 
 <div class="container">
   <div class="row">
@@ -14,8 +15,7 @@
               <div class="card-body">
                   <h5 class="card-title">{{ food.name }}</h5>
                   <p class="card-text">{{ food.description }}</p>
-                  <p class="card-text"><strong>Price:</strong> ${{ food.price }}</p>
-                  <a href="#" class="btn btn-primary">Order Now</a>
+                  <p class="card-text"><strong>Price:</strong> £{{ food.price }}</p>
               </div>
           </div>
       </div>

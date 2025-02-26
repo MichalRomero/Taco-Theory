@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Basket{% endblock %}
+
+{% block content %}
+<h2>Your Basket</h2>
+
+{% if basket_items %}
+<table>
+    <tr>
+        <th>Food</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+    {% for item in basket_items %}
+    <tr>
+        <td>{{ item.food.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>${{ item.food.price }}</td>
+        <td>${{ item.food.price * item.quantity }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Total: ${{ total_price }}</h3>
+<a href="{{ url_for('auth.order') }}">Add More Items</a>
+<a href="{{ url_for('auth.checkout') }}">Checkout</a>
+
+{% else %}
+<p>Your basket is empty.</p>
+<a href="{{ url_for('auth.order') }}">Order Now</a>
+{% endif %}
+
+{% endblock %}
